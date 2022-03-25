@@ -8,7 +8,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 
 import main.game.MainRunner;
@@ -160,19 +162,64 @@ public class World {
         Iterator<NPC> nIterator = npcs.iterator();
         while (nIterator.hasNext()) {
             NPC npc = nIterator.next();
+            Vector2 playerCenter = player.getCenter();
+            if (npc.inProcess(playerCenter)) {
+                int npcRet = npc.update(deltaTime);
+                //When the NPC is dead update player stats and remove the npc
+                if (npcRet == 0) {
+                    player.collectScore(NPCConstants.SCORE_DEATH);
+                    player.collectGold(NPCConstants.GOLD);
+                    player.collectXP(NPCConstants.XP);
 
-            //When the NPC is dead update player stats and remove the npc
-            if (npc.update(deltaTime) == 0) {
-                player.collectScore(NPCConstants.SCORE_DEATH);
-                player.collectGold(NPCConstants.GOLD);
-                player.collectXP(NPCConstants.XP);
+                    if (player.getCurrentObjective() != null) {
+                        if (player.getCurrentObjective().getuKey().equals("npc")) player.updateObjective("npc", 1);
+                    }
 
-                if (player.getCurrentObjective() != null) {
-                    if (player.getCurrentObjective().getuKey().equals("npc")) player.updateObjective("npc", 1);
+                    npc.dispose();
+                    nIterator.remove();
                 }
 
-                npc.dispose();
-                nIterator.remove();
+                if (npc.inVision(playerCenter)) {
+                    // npc move to player
+                    Vector2 npcPos = npc.getPosition();
+                    Vector2 position = new Vector2(0, 0);
+                    double rotX = 0;
+                    double rotY = 0;
+                    if (npcPos.dst(playerCenter) > 150) {
+                        // Do same as player movement but get x and y from vector calc
+                        if (Math.abs(npcPos.x) - Math.abs(playerCenter.x) > 0) { // Left
+                            position.x = -NPCConstants.MOVE_SPEED * deltaTime;
+                            rotX = Math.PI / 2;
+                            rotY = Math.PI / 2;
+                        } else if (Math.abs(npcPos.x) - Math.abs(playerCenter.x) < 0) { // Right
+                            position.x = PlayerConstants.SPEED * deltaTime;
+                            rotX = 3 * Math.PI / 2;
+                            rotY = 3 * Math.PI / 2;
+                        }
+                
+                        if (Math.abs(npcPos.y) - Math.abs(playerCenter.y) < 0) { // Up
+                            position.y = PlayerConstants.SPEED * deltaTime;
+                            if (rotX == 3 * Math.PI / 2) rotX = 2 * Math.PI;
+                            else rotX = 0;
+                        } else if (Math.abs(npcPos.y) - Math.abs(playerCenter.y) > 0) { // Down
+                            position.y = -PlayerConstants.SPEED * deltaTime;
+                            rotY = Math.PI;
+                            if (rotX == 0) rotX = Math.PI;
+                        }
+                        Sprite sprite = npc.getSprite();
+                        sprite.translate(position.x, position.y);
+                        sprite.setRotation((float) Calculations.RadToDeg((rotX + rotY) / 2));
+                    }
+                } else {
+                    // patrol? random movement?
+                }
+
+                if (npcRet == 2 && npc.inRange(playerCenter)) {
+                    // npc start attacking player
+                    Vector2 npcOrigin = npc.getCenter();
+                    double angle = -Math.atan2(npcOrigin.y - playerCenter.y - BulletConstants.BULLET_OFFET.y, npcOrigin.x - playerCenter.x - BulletConstants.BULLET_OFFET.x) - Math.PI / 2;
+                    eBullets.add(new Bullet(new Vector2(npcOrigin.x - 16, npcOrigin.y - 16), (float) angle, NPCConstants.BULLET_SPEED, npc.getDamage()));
+                }
             }
         }
     }

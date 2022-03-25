@@ -31,6 +31,10 @@ public class Constants {
     public static class NPCConstants {
         public static final float MOVE_SPEED = 100f;
         public static final float PROCESS_RANGE = 1000f;
+        public static final float  FIRE_RATE = 1500f;
+        public static final float BULLET_SPEED = 250f;
+        public static final float VISION_RANGE = 600f;
+        public static final float ATTACK_RANGE = 300f;
         public static final int GOLD = 50;
         public static final int XP = 1;
         public static final int SCORE_HIT = 10;
