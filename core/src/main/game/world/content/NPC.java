@@ -22,14 +22,14 @@ public class NPC extends Entity {
         this.texture = new Texture(Gdx.files.internal("textures/npcs.png"));
         this.sprite = new Sprite(texture);
 
-        //Set inital NPC transform.
+        // Set inital NPC transform.
         sprite.setPosition(position.x, position.y);
         sprite.setRotation(rotation);
     }
     
     @Override
     public int update(float deltaTime) {
-        //Check if the npc is not dead to determine whether it should be removed.
+        // Check if the npc is not dead to determine whether it should be removed.
         if (this.health <= 0) return 0;
         if (TimeUtils.timeSinceMillis(lastShot) > NPCConstants.FIRE_RATE) {
             lastShot = TimeUtils.millis();
