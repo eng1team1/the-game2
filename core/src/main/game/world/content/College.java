@@ -106,6 +106,7 @@ public class College extends Entity {
         if (pos.dst(this.getPosition()) <= CollegeConstants.PROCESS_RANGE) return true;
         else return false;
     }
+    
     public void capture(){
         Vector2 replacePos = new Vector2(this.getPosition());
         this.name = "captured";

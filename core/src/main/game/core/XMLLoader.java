@@ -3,6 +3,9 @@ package main.game.core;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.print.attribute.Size2DSyntax;
+
 import java.util.List;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -13,6 +16,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 
 import main.game.world.content.College;
 import main.game.world.content.NPC;
+import main.game.world.content.Obstacle;
 import main.game.world.player.Objectives.Objective;
 
 public class XMLLoader {
@@ -20,12 +24,14 @@ public class XMLLoader {
     private Set<College> colleges;
     private Set<NPC> npcs;
     private List<Objective> objectives;
+    private Set<Obstacle> obstacles;
 
     public XMLLoader(FileHandle handle) {
         this.handle = handle;
         this.npcs = new HashSet<>();
         this.colleges = new HashSet<>();
         this.objectives = new ArrayList<>();
+        this.obstacles = new HashSet<>();
     }
 
     /**
@@ -40,6 +46,7 @@ public class XMLLoader {
         Array<Element> xmlNpcs = root.getChildByName("npcs").getChildrenByName("npc");
         Array<Element> xmlColleges = root.getChildByName("colleges").getChildrenByName("college");
         Array<Element> xmlObjectives = root.getChildByName("objectives").getChildrenByName("objective");
+        Array<Element> xmlObstacles = root.getChildByName("obstacles").getChildrenByName("obstacle");
 
         for (Element npc : xmlNpcs) {
             int health = Integer.parseInt(npc.get("health"));
@@ -73,6 +80,13 @@ public class XMLLoader {
                 colleges.add(new College(health, damage, name, key, new Vector2(objx, objy), false));
             }
         }
+
+        for (Element obstacle : xmlObstacles) {
+            int objX = Integer.parseInt(obstacle.get("x"));
+            int objY = Integer.parseInt(obstacle.get("y"));
+            String type = obstacle.get("type");
+            obstacles.add(new Obstacle(new Vector2(objX, objY), type));
+        }
     }
 
     public Set<College> getColleges() {
@@ -85,5 +99,9 @@ public class XMLLoader {
 
     public List<Objective> getObjectives() {
         return objectives;
+    }
+
+    public Set<Obstacle> getObstacles() {
+        return obstacles;
     }
 }
