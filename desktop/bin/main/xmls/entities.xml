@@ -224,4 +224,21 @@
             <ukey>college-langwith</ukey>
         </objective>
     </objectives>
+    <obstacles>
+        <obstacle>
+            <x>1750</x>
+            <y>1000</y>
+            <type>Storm</type>
+        </obstacle>
+        <obstacle>
+            <x>700</x>
+            <y>1200</y>
+            <type>Rocks</type>
+        </obstacle>
+        <obstacle>
+            <x>1000</x>
+            <y>500</y>
+            <type>Shipwreck</type>
+        </obstacle>
+    </obstacles>
 </entities>

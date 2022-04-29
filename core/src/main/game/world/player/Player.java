@@ -26,6 +26,7 @@ public class Player extends Entity {
     private Texture boat;
 
     private boolean immune, disabled, won;
+    private boolean isSlowed = false;
 
     private float disabledAngle;
     private long lastShot, lastHit; //lastScore;
@@ -77,15 +78,25 @@ public class Player extends Entity {
         double rotX = 0, rotY = 0;
         boolean input = false;
 
+        float speed;
+
+        if (isSlowed) {
+            speed = PlayerConstants.SPEED * 0.5f;
+        } else {
+            speed = PlayerConstants.SPEED;
+        }
+        
+        System.out.println(speed);
+
         //Get the player input keys and determine the x axis of movement
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             input = true;
-            position.x = -PlayerConstants.SPEED * deltaTime;
+            position.x = -speed * deltaTime;
             rotX = Math.PI / 2;
             rotY = Math.PI / 2;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             input = true;
-            position.x = PlayerConstants.SPEED * deltaTime;
+            position.x = speed * deltaTime;
             rotX = 3 * Math.PI / 2;
             rotY = 3 * Math.PI / 2;
         }
@@ -93,12 +104,12 @@ public class Player extends Entity {
         //Get the player input keys and determine the y axis of movement
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             input = true;
-            position.y = PlayerConstants.SPEED * deltaTime;
+            position.y = speed * deltaTime;
             if (rotX == 3 * Math.PI / 2) rotX = 2 * Math.PI;
             else rotX = 0;
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             input = true;
-            position.y = -PlayerConstants.SPEED * deltaTime;
+            position.y = -speed * deltaTime;
             rotY = Math.PI;
             if (rotX == 0) rotX = Math.PI;
         }
@@ -184,6 +195,18 @@ public class Player extends Entity {
             if (stats.takeDamage(damage)) MainRunner.IS_MENU = true;
             else collided(origin);
         }
+    }
+
+    public void takeObstacleDamage(int damage) {
+        if (!immune) {
+            if (stats.takeDamage(damage)) MainRunner.IS_MENU = true;
+            immune = true;
+            lastHit = TimeUtils.millis();
+        }
+    }
+
+    public void setSlowEffect(boolean isSlow) {
+        isSlowed = isSlow;
     }
 
     /**

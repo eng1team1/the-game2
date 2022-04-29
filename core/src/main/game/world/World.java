@@ -29,6 +29,7 @@ public class World {
     private Set<College> colleges;
     private Set<Bullet> eBullets;
     private Set<Bullet> pBullets;
+    private Set<Obstacle> obstacles;
 
     private OrthographicCamera gameCamera, uiCamera;
     private SpriteBatch batch, uiBatch;
@@ -48,6 +49,7 @@ public class World {
         player = new Player(100, 100, new Vector2(1000, 1000), 270, loader.getObjectives());
         npcs = loader.getNpcs();
         colleges = loader.getColleges();
+        obstacles = loader.getObstacles();
         eBullets = new HashSet<>();
         pBullets = new HashSet<>();
         inGameUI = new IGUI();
@@ -222,6 +224,24 @@ public class World {
                 }
             }
         }
+
+        Iterator<Obstacle> obsIterator = obstacles.iterator();
+        while (obsIterator.hasNext()) {
+            Obstacle obstacle = obsIterator.next();
+            obstacle.update(deltaTime);
+        }
+
+        // call and apply obstacle from obstacle class
+        // or add new method in player class and pass obstacle to player. <-- this one better?
+        for (Obstacle obstacle : obstacles) {
+            if (obstacle.inProcess(player.getCenter())) {
+                if (player.getBounds().overlaps(obstacle.getBounds())) {
+                    obstacle.enterObstacle(player);
+                } else {
+                    player.setSlowEffect(false);
+                }
+            }
+        }
     }
 
     /**
@@ -246,7 +266,8 @@ public class World {
      * {@link Player},
      * {@link College},
      * {@link NPC},
-     * {@link Bullet}.
+     * {@link Bullet},
+     * {@link Obstacle}.
      */
     private void collisions() {
         Vector2 playerCenter = player.getCenter();
@@ -275,7 +296,6 @@ public class World {
                 }
             }
         }
-
 
         //Process enemy bullets towards the Player
         if (!collided) {
@@ -360,6 +380,10 @@ public class World {
         //Render colleges
         for (College college : colleges) {
             college.render(batch);
+        }
+
+        for (Obstacle obstacle: obstacles) {
+            obstacle.render(batch);
         }
 
         player.render(batch);
