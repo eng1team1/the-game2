@@ -250,7 +250,10 @@ public class Player extends Entity {
     public Objective getCurrentObjective(){
         return objectives.getCurrentObjective();
     }
-
+    public void heal(int amount)
+    {
+        stats.heal(amount);
+    }
     public int getGold() {
         return stats.getGold();
     }
@@ -274,6 +277,8 @@ public class Player extends Entity {
     {
         stats.decreaseGold(amount);
     }
+    public void increaseBoughtDamage(int amount){ stats.increaseBoughtDamage(amount);}
+    public int getBoughtDamage(){return stats.getBoughtDamage();}
     public boolean getWon() {
         return won;
     }

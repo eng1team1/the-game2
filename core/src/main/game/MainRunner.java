@@ -97,7 +97,7 @@ public class MainRunner extends ApplicationAdapter {
     {//
         Player play1;
         play1 = world.getPlayer();
-        goldShop = new GoldShop(play1.getGold());//
+        goldShop = new GoldShop(play1);//
     }//
     public void generatePause(){
         if(!inPause)

@@ -7,7 +7,7 @@ public class PlayerStats {
 
     private int initialHealth;
     private int initialDamage;
-
+    private int BoughtDamage;
     private int health;
     private int damage;
     private int score;
@@ -32,7 +32,10 @@ public class PlayerStats {
     public void increaseGold(int amount) {
         gold.collect(amount);
     }
-
+    public void increaseBoughtDamage(int amount)
+    {
+        BoughtDamage =+ amount; 
+    }
      /**
      * Increases the xp value by an amount, within the {@link Leveler} object;
      * @param amount to increase.
@@ -47,7 +50,7 @@ public class PlayerStats {
     private void levelUP() {
         int level = leveler.getLevel();
         health = (int) (HEALTH_MULTI * level * initialHealth + initialHealth);
-        damage = (int) (DAMAGE_MULTI * level * initialDamage + initialDamage);
+        damage = (int) (DAMAGE_MULTI * level * initialDamage + initialDamage + BoughtDamage);
     }
 
     /**
@@ -63,10 +66,18 @@ public class PlayerStats {
      * Gets the max health based on the current level from the {@link Leveler}.
      * @return the max health.
      */
+    public int getBoughtDamage()
+    {
+        return BoughtDamage;
+    }
+    
     public int getMaxHealth() {
         return (int) HEALTH_MULTI * leveler.getLevel() * initialHealth;
     }
-
+    public void heal(int amount)
+    {
+        health =+ amount;
+    }
     /**
      * Take damage by an amount.
      * @param damage amount.

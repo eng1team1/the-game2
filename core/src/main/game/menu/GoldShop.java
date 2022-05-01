@@ -49,6 +49,7 @@ public class GoldShop {
         gold =player.getGold();
         player = this.player;
         cost1 = player.getMaxHealth() - player.getHealth();
+        cost1 = 400 + player.getBoughtDamage()*4;
         exit = new Label("PRESS ESCAPE TO EXIT", basicStyle);
 
         title.setFontScale(2f);
@@ -125,7 +126,12 @@ public class GoldShop {
         option2.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                System.out.println("clicked");
+                if(gold >= cost2)
+                {
+                    gold =- cost2;
+                    player.decreaseGold(cost2);
+                    player.increaseBoughtDamage(50);
+                }
             }
         });
         option3 = new TextButton("Get bigger Sails", skins, "default");
