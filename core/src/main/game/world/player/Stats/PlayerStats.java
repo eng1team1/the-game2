@@ -97,4 +97,5 @@ public class PlayerStats {
     public int[] getLevelNXP() {
         return leveler.getLevelNXP();
     }
+    public void decreaseGold(int amount){gold.removeGold(amount);}
 }

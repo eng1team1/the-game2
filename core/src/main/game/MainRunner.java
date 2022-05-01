@@ -4,18 +4,24 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.TimeUtils;
-
-import main.game.menu.MenuUI;//
-import main.game.menu.Gold;
-import main.game.menu.Pause;//
+import main.game.menu.GoldShop;
+import main.game.menu.MenuUI;
+import main.game.menu.Pause;
 import main.game.world.World;
+import main.game.world.content.College;
+import main.game.world.content.NPC;
+import main.game.world.player.Objectives.Objective;
+import main.game.world.player.Player;
+
+import java.util.List;
+import java.util.Set;
 
 public class MainRunner extends ApplicationAdapter {   
     //Temp H & W until fullscreen cals
-    public static boolean IS_MENU = true, CLOSING = false , Is_Gold = false, Is_Pause = false;
+    public static boolean IS_MENU = true, CLOSING = false , Is_Gold = false, Is_Pause = false, inPause = false;
     
     private long fullscreenCooldown;
-    private Gold gold;//
+    private GoldShop goldShop;//
     private Pause pause;//
     private World world;
     private MenuUI menu;
@@ -55,7 +61,7 @@ public class MainRunner extends ApplicationAdapter {
         }
         else if(Is_Gold){//
             generateGold();//
-            gold.goldCycle();//
+            goldShop.goldCycle();//
 
         }else {
             if (world == null) generateWorld();
@@ -89,10 +95,22 @@ public class MainRunner extends ApplicationAdapter {
     }
     public void generateGold()//
     {//
-        gold = new Gold();//
+        Player play1;
+        play1 = world.getPlayer();
+        goldShop = new GoldShop(play1.getGold());//
     }//
     public void generatePause(){
-
-        pause = new Pause();
+        if(!inPause)
+        {
+            Set<NPC> npc;
+            Set<College> college;
+            List<Objective> object;
+            Player play;
+            npc = world.getNPCs();
+            college = world.getCollege();
+            play = world.getPlayer();
+            pause = new Pause( npc, college, play);
+            inPause = true;
+        }
     }
 }

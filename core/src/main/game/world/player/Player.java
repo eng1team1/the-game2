@@ -244,7 +244,9 @@ public class Player extends Entity {
         if (xpGain != 0) collectXP(xpGain);
         if (getCurrentObjective() == null) won = true;
     }
-
+    public List<Objective> getObjective()
+    {
+        return objectives;}
     public Objective getCurrentObjective(){
         return objectives.getCurrentObjective();
     }
@@ -264,11 +266,14 @@ public class Player extends Entity {
     public int getHealth() {
         return stats.getHealth();
     }
-
+    public int getMaxHealth(){return stats.getMaxHealth();}
     public int getScore() {
         return stats.getScore();
     }
-
+    public void decreaseGold(int amount)
+    {
+        stats.decreaseGold(amount);
+    }
     public boolean getWon() {
         return won;
     }

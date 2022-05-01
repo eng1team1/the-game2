@@ -17,7 +17,10 @@ public class Gold {
     public int getTotalGold() {
         return totalGold;
     }
-
+    public void removeGold(int amount)
+    {
+        totalGold =- amount;
+    }
     /**
      * Increase the gold value by an amount.
      * @param amount of gold.

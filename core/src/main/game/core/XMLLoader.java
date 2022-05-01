@@ -18,7 +18,26 @@ import main.game.world.content.College;
 import main.game.world.content.NPC;
 import main.game.world.content.Obstacle;
 import main.game.world.player.Objectives.Objective;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
+import com.badlogic.gdx.utils.XmlWriter;
+import main.game.world.content.College;
+import main.game.world.content.NPC;
+import main.game.world.player.Objectives.Objective;
+import main.game.world.player.Objectives.ObjectiveManager;
+import main.game.world.player.Player;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 public class XMLLoader {
     private FileHandle handle;
     private Set<College> colleges;
@@ -33,7 +52,12 @@ public class XMLLoader {
         this.objectives = new ArrayList<>();
         this.obstacles = new HashSet<>();
     }
-
+    public XMLLoader(FileHandle handle, Set<NPC> npcs, Set<College> colleges, List<Objective> objectives) {
+        this.handle = handle;
+        this.npcs = npcs;
+        this.colleges = colleges;
+        this.objectives = objectives;
+    }
     /**
      * Loads all the objects from the XML File given and initalises all {@link Entity}, and {@link Objective} instances present.
      * @see
@@ -88,7 +112,61 @@ public class XMLLoader {
             obstacles.add(new Obstacle(new Vector2(objX, objY), type));
         }
     }
+    public void write(FileHandle layoutFile, Set<NPC> npcs, Set<College> colleges, List<Objective> objectives,Player player) {
+        try {
+        
+        XmlWriter xmlWriter = new XmlWriter(new FileWriter(String.valueOf(Gdx.files.internal("xmls/save.xml"))));
+        xmlWriter.element("entity");
+        xmlWriter.element("colleges");
+        for (College college : colleges) {
+            xmlWriter.element("college");
+            xmlWriter.attribute("x", college.getBounds().getX())
+                    .attribute("y", college.getBounds().getY())
+                    .attribute("health", college.getHealth())
+                    .attribute("damage", college.getDamage())
+                    .attribute("name", college.getName())
+                    .attribute("ukey", college.getUkey());
+            xmlWriter.pop();
+        }
+        xmlWriter.element("npcs");
+        for (NPC npc : npcs) {
+            xmlWriter.element("npc");
+            xmlWriter.attribute("x", npc.getBounds().getX())
+                    .attribute("y", npc.getBounds().getY())
+                    .attribute("health", npc.getHealth())
+                    .attribute("rotation", npc.getRotation());
+            xmlWriter.pop();
+        }
 
+        for (Objective objective : objectives) {
+                xmlWriter.element("objective");
+                xmlWriter.attribute("x", objective.getLocation().x)
+                        .attribute("y", objective.getLocation().y)
+                        .attribute("xp", objective.getXp())
+                        .attribute("rotation", objective.getAmount())
+                        .attribute("name", objective.getName())
+                        .attribute("ukey", objective.getuKey());
+                xmlWriter.pop();
+
+        }
+
+
+        xmlWriter.element("player");
+        xmlWriter.attribute("x", player.getPosition().x)
+                .attribute("y", player.getPosition().y)
+                .attribute("damage", player.getDamage())
+                .attribute("gold", player.getGold())
+                .attribute("xp", player.getLevelNXP())
+                .attribute("score", player.getScore());
+        xmlWriter.close();
+
+
+    }
+       catch (IOException e)
+       {
+            e.printStackTrace();
+       }
+    }
     public Set<College> getColleges() {
         return colleges;
     }

@@ -21,7 +21,30 @@ import main.game.core.Constants.*;
 import main.game.world.content.*;
 import main.game.world.player.Player;
 import main.game.world.ui.IGUI;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
+import main.game.MainRunner;
+import main.game.core.Calculations;
+import main.game.core.Constants;
+import main.game.core.Constants.BulletConstants;
+import main.game.core.Constants.CollegeConstants;
+import main.game.core.Constants.NPCConstants;
+import main.game.core.Constants.PlayerConstants;
+import main.game.core.XMLLoader;
+import main.game.world.content.Bullet;
+import main.game.world.content.College;
+import main.game.world.content.Entity;
+import main.game.world.content.NPC;
+import main.game.world.player.Player;
+import main.game.world.ui.IGUI;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 public class World {
     private Player player;
     private IGUI inGameUI;
@@ -33,7 +56,17 @@ public class World {
 
     private OrthographicCamera gameCamera, uiCamera;
     private SpriteBatch batch, uiBatch;
+    public Set<NPC> getNPCs()
+    {
+        return npcs;
+    }
+    public Set<College> getCollege()
+    {return colleges;}
 
+    public Player getPlayer() {
+        return player;
+    }
+    
     public World() {
         // Create XMLLoader to load input files
         XMLLoader loader = new XMLLoader(Gdx.files.internal("xmls/entities.xml"));
@@ -53,6 +86,7 @@ public class World {
         eBullets = new HashSet<>();
         pBullets = new HashSet<>();
         inGameUI = new IGUI();
+
 
         //Generate npc and college objects using XML data
         gameCamera = new OrthographicCamera();
