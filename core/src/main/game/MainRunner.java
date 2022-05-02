@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class MainRunner extends ApplicationAdapter {   
     //Temp H & W until fullscreen cals
-    public static boolean IS_MENU = true, CLOSING = false , Is_Gold = false, Is_Pause = false, inPause = false;
+    public static boolean IS_MENU = true, CLOSING = false , Is_Gold = false, Is_Pause = false, inPause = false, inGold = false;
     
     private long fullscreenCooldown;
     private GoldShop goldShop;//
@@ -62,8 +62,9 @@ public class MainRunner extends ApplicationAdapter {
         else if(Is_Gold){//
             generateGold();//
             goldShop.goldCycle();//
-
-        }else {
+            
+        }
+        else {
             if (world == null) generateWorld();
             world.worldCycle();
         }
@@ -95,9 +96,11 @@ public class MainRunner extends ApplicationAdapter {
     }
     public void generateGold()//
     {//
-        Player play1;
-        play1 = world.getPlayer();
-        goldShop = new GoldShop(play1);//
+        if (!inGold) {
+            Player play = world.getPlayer();
+            goldShop  = new GoldShop(play);
+            inGold = true;
+        }
     }//
     public void generatePause(){
         if(!inPause)

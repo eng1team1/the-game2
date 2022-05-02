@@ -19,7 +19,7 @@ public class Gold {
     }
     public void removeGold(int amount)
     {
-        totalGold =- amount;
+        gold = gold- amount;
     }
     /**
      * Increase the gold value by an amount.

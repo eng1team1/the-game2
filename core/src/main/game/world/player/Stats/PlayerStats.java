@@ -11,7 +11,7 @@ public class PlayerStats {
     private int health;
     private int damage;
     private int score;
-
+    private float extraspeed;
     private Gold gold;
     private Leveler leveler;
 
@@ -23,6 +23,8 @@ public class PlayerStats {
 
         this.gold = new Gold(gold);
         this.leveler = new Leveler(xp);
+        this.extraspeed = 0;
+        this.BoughtDamage = 0;
     }
 
     /**
@@ -34,7 +36,10 @@ public class PlayerStats {
     }
     public void increaseBoughtDamage(int amount)
     {
-        BoughtDamage =+ amount; 
+        BoughtDamage = BoughtDamage + amount; 
+    }
+    public void increaseExtraSpeed(float amount){
+        extraspeed =extraspeed + amount;
     }
      /**
      * Increases the xp value by an amount, within the {@link Leveler} object;
@@ -70,13 +75,13 @@ public class PlayerStats {
     {
         return BoughtDamage;
     }
-    
+    public float getExtraSpeed(){return extraspeed;}
     public int getMaxHealth() {
-        return (int) HEALTH_MULTI * leveler.getLevel() * initialHealth;
+        return (int) (HEALTH_MULTI * leveler.getLevel() * initialHealth + initialHealth);
     }
     public void heal(int amount)
     {
-        health =+ amount;
+        health =health + amount;
     }
     /**
      * Take damage by an amount.

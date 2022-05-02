@@ -117,6 +117,10 @@ public class World {
      */
     private void update() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) MainRunner.IS_MENU = true;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G))
+        {
+            MainRunner.Is_Gold = true;
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) MainRunner.Is_Pause = true;//
         float deltaTime = Gdx.graphics.getDeltaTime();
         if(!MainRunner.Is_Pause)//

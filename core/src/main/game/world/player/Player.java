@@ -13,6 +13,8 @@ import main.game.world.player.Stats.PlayerStats;
 
 import java.util.List;
 
+import javax.xml.stream.events.StartDocument;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -79,11 +81,12 @@ public class Player extends Entity {
         boolean input = false;
 
         float speed;
-
+       
+        
         if (isSlowed) {
-            speed = PlayerConstants.SPEED * 0.5f;
+            speed = PlayerConstants.SPEED * 0.5f +  stats.getExtraSpeed() * 0.5f;
         } else {
-            speed = PlayerConstants.SPEED;
+            speed = PlayerConstants.SPEED + stats.getExtraSpeed();
         }
         
         System.out.println(speed);
@@ -196,7 +199,7 @@ public class Player extends Entity {
             else collided(origin);
         }
     }
-
+    public void increaseExtraSpeed(float amount){stats.increaseExtraSpeed(amount);}
     public void takeObstacleDamage(int damage) {
         if (!immune) {
             if (stats.takeDamage(damage)) MainRunner.IS_MENU = true;
@@ -216,7 +219,7 @@ public class Player extends Entity {
     public void collectGold(int amount) {
         stats.increaseGold(amount);
     }
-
+    public float getExtraSpeed(){return stats.getExtraSpeed();}
     /**
      * Call the player stats to increase the amount of xp the player has. Stored by the {@link Leveler}.
      * @param amount The amount of xp to increase by.
