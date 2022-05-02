@@ -50,9 +50,7 @@ public class Pause {
         enter.setFontScale(2f);
         enter.setPosition(Gdx.graphics.getWidth() / 2 - enter.getWidth() / 2, 100);
         enter.setAlignment(Align.center);
-
         exit.setPosition(Gdx.graphics.getWidth() / 2 - exit.getWidth() / 2, 70);
-
         logo.setScale(2f);
         logo.setPosition(Gdx.graphics.getWidth() / 2 - logo.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         initButtons( npcs, colleges, player);

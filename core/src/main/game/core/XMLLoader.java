@@ -34,6 +34,7 @@ import main.game.world.player.Player;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -66,7 +67,7 @@ public class XMLLoader {
     public void load() {
         XmlReader reader = new XmlReader();
         Element root = reader.parse(this.handle);
-
+        
         Array<Element> xmlNpcs = root.getChildByName("npcs").getChildrenByName("npc");
         Array<Element> xmlColleges = root.getChildByName("colleges").getChildrenByName("college");
         Array<Element> xmlObjectives = root.getChildByName("objectives").getChildrenByName("objective");
@@ -114,8 +115,10 @@ public class XMLLoader {
     }
     public void write(FileHandle layoutFile, Set<NPC> npcs, Set<College> colleges, List<Objective> objectives,Player player) {
         try {
+        StringWriter write = new StringWriter();
         
-        XmlWriter xmlWriter = new XmlWriter(new FileWriter(String.valueOf(Gdx.files.internal("xmls/save.xml"))));
+        XmlWriter xmlWriter = new XmlWriter(write);
+        
         xmlWriter.element("entity");
         xmlWriter.element("colleges");
         for (College college : colleges) {
@@ -149,7 +152,6 @@ public class XMLLoader {
                 xmlWriter.pop();
 
         }
-
 
         xmlWriter.element("player");
         xmlWriter.attribute("x", player.getPosition().x)
