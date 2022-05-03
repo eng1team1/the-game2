@@ -69,7 +69,10 @@ public class XMLLoader {
      */
     public void load() {
         XmlReader reader = new XmlReader();
+        System.out.println("reader init");
+        System.out.println("handle: " + this.handle);
         Element root = reader.parse(this.handle);
+        System.out.println("got root");
         
         Array<Element> xmlNpcs = root.getChildByName("npcs").getChildrenByName("npc");
         Array<Element> xmlColleges = root.getChildByName("colleges").getChildrenByName("college");

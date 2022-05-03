@@ -74,9 +74,11 @@ public class World {
         XMLLoader loader = new XMLLoader(Gdx.files.internal("xmls/entities.xml"));
 
         try {
+            System.out.println("try load");
             //Read input file and initalize variables
             loader.load();
         } catch (Exception e) {
+            System.out.println("error");
             System.out.println(e);
         }
 
