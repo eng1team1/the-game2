@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 import main.game.world.content.College;
 import main.game.world.content.NPC;
 import main.game.world.content.Obstacle;
+import main.game.world.content.Powerups;
 import main.game.world.player.Objectives.Objective;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -45,6 +46,7 @@ public class XMLLoader {
     private Set<NPC> npcs;
     private List<Objective> objectives;
     private Set<Obstacle> obstacles;
+    private Set<Powerups> powerups;
 
     public XMLLoader(FileHandle handle) {
         this.handle = handle;
@@ -52,6 +54,7 @@ public class XMLLoader {
         this.colleges = new HashSet<>();
         this.objectives = new ArrayList<>();
         this.obstacles = new HashSet<>();
+        this.powerups = new HashSet<>();
     }
     public XMLLoader(FileHandle handle, Set<NPC> npcs, Set<College> colleges, List<Objective> objectives) {
         this.handle = handle;
@@ -72,6 +75,7 @@ public class XMLLoader {
         Array<Element> xmlColleges = root.getChildByName("colleges").getChildrenByName("college");
         Array<Element> xmlObjectives = root.getChildByName("objectives").getChildrenByName("objective");
         Array<Element> xmlObstacles = root.getChildByName("obstacles").getChildrenByName("obstacle");
+       Array<Element> xmlPowerups = root.getChildByName("powerups").getChildrenByName("powerup");
 
         for (Element npc : xmlNpcs) {
             int health = Integer.parseInt(npc.get("health"));
@@ -112,7 +116,15 @@ public class XMLLoader {
             String type = obstacle.get("type");
             obstacles.add(new Obstacle(new Vector2(objX, objY), type));
         }
+
+        for (Element powerup : xmlPowerups) {
+            int objX = Integer.parseInt(powerup.get("x"));
+            int objY = Integer.parseInt(powerup.get("y"));
+            String type = powerup.get("type");
+            powerups.add(new Powerups(new Vector2(objX, objY), type));
+        }
     }
+    
     public void write(FileHandle layoutFile, Set<NPC> npcs, Set<College> colleges, List<Objective> objectives,Player player) {
         try {
         StringWriter write = new StringWriter();
@@ -184,4 +196,8 @@ public class XMLLoader {
     public Set<Obstacle> getObstacles() {
         return obstacles;
     }
+    public Set<Powerups> getPowerups(){
+        return powerups;
+    }
+
 }

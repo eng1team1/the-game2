@@ -14,7 +14,7 @@ public class PlayerStats {
     private float extraspeed;
     private Gold gold;
     private Leveler leveler;
-
+    private boolean doubled;
     public PlayerStats(int health, int damage, int xp, int gold) {
         this.initialDamage = damage;
         this.initialHealth = health;
@@ -114,4 +114,21 @@ public class PlayerStats {
         return leveler.getLevelNXP();
     }
     public void decreaseGold(int amount){gold.removeGold(amount);}
+
+    public void DoubleDamage(boolean damages) {
+        doubled = damages;
+        if(damages){
+            damage = damage *2;
+        }
+        else
+        {
+            damage = damage /2;
+        }
+        };
+    public boolean isDoubleDamage()
+    {
+        return doubled;
+    }
 }
+   
+

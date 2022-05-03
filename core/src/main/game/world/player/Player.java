@@ -26,10 +26,10 @@ public class Player extends Entity {
     private PlayerStats stats;
     private ObjectiveManager objectives;
     private Texture boat;
-
+    private boolean isdoublespeed = false;
     private boolean immune, disabled, won;
     private boolean isSlowed = false;
-
+    private boolean ispowerup;
     private float disabledAngle;
     private long lastShot, lastHit; //lastScore;
 
@@ -84,12 +84,21 @@ public class Player extends Entity {
        
         
         if (isSlowed) {
-            speed = PlayerConstants.SPEED * 0.5f +  stats.getExtraSpeed() * 0.5f;
+            if(!isdoublespeed){
+                speed = PlayerConstants.SPEED * 0.5f +  stats.getExtraSpeed() * 0.5f;
+            }
+            else{
+                speed = PlayerConstants.SPEED  +  stats.getExtraSpeed() ;
+            }
         } else {
-            speed = PlayerConstants.SPEED + stats.getExtraSpeed();
+            if(!isdoublespeed){
+                speed = PlayerConstants.SPEED  +  stats.getExtraSpeed();
+            }
+            else{
+                speed = PlayerConstants.SPEED * 2f +  stats.getExtraSpeed() * 2f;
+            }
         }
         
-        System.out.println(speed);
 
         //Get the player input keys and determine the x axis of movement
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -161,6 +170,7 @@ public class Player extends Entity {
 
             return -1;
         }
+        
     }
 
     /**
@@ -285,4 +295,32 @@ public class Player extends Entity {
     public boolean getWon() {
         return won;
     }
+
+    public void getDoubleDamage(boolean isDoubleDamage) {
+        stats.DoubleDamage(isDoubleDamage);   }
+    public void getDoubleSpeed(boolean truth){
+        isdoublespeed = true;
+    }
+    public void powerup(boolean powerup)
+    {
+        ispowerup = powerup;
+        if(!powerup)
+        {
+             
+            if(isdoublespeed){
+                isdoublespeed = false;
+            }
+            else if (stats.isDoubleDamage())
+            {
+                stats.DoubleDamage(false);
+            }
+        }
+        else
+        {
+            ispowerup = powerup;
+        }
+        
+        
+    }
+   
 }

@@ -53,9 +53,11 @@ public class World {
     private Set<Bullet> eBullets;
     private Set<Bullet> pBullets;
     private Set<Obstacle> obstacles;
-
+    private Set<Powerups> powerups;
+    private boolean ispowerup = false;
     private OrthographicCamera gameCamera, uiCamera;
     private SpriteBatch batch, uiBatch;
+    private float timesinceCollision;
     public Set<NPC> getNPCs()
     {
         return npcs;
@@ -83,6 +85,7 @@ public class World {
         npcs = loader.getNpcs();
         colleges = loader.getColleges();
         obstacles = loader.getObstacles();
+        powerups = loader.getPowerups();
         eBullets = new HashSet<>();
         pBullets = new HashSet<>();
         inGameUI = new IGUI();
@@ -280,6 +283,38 @@ public class World {
                 }
             }
         }
+        Iterator<Powerups> powIterator = powerups.iterator();
+        while (powIterator.hasNext()) {
+            Powerups powerup = powIterator.next();
+            powerup.update(deltaTime);
+        }
+        // call and apply obstacle from obstacle class
+        // or add new method in player class and pass obstacle to player. <-- this one better?
+        
+        for (Powerups powerup : powerups) {
+            if (powerup.inProcess(player.getCenter())) {
+                if (player.getBounds().overlaps(powerup.getBounds())) {
+                    powerup.enterPowerup(player);
+                    ispowerup = true;
+                    timesinceCollision = Gdx.graphics.getDeltaTime();
+                } else {
+                    player.setSlowEffect(false);
+                }
+            }
+        }
+        
+        if(ispowerup)  
+        {
+        if(timesinceCollision+10 == Gdx.graphics.getDeltaTime()){
+            {
+                player.powerup(false);
+            } 
+            ispowerup = false;
+        
+        }
+    }
+        
+        
     }
 
     /**
@@ -422,6 +457,10 @@ public class World {
 
         for (Obstacle obstacle: obstacles) {
             obstacle.render(batch);
+        }
+        for (Powerups powerup: powerups)
+        {
+            powerup.render(batch);
         }
 
         player.render(batch);
