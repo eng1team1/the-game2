@@ -90,7 +90,6 @@ public class World {
         pBullets = new HashSet<>();
         inGameUI = new IGUI();
 
-
         //Generate npc and college objects using XML data
         gameCamera = new OrthographicCamera();
         uiCamera = new OrthographicCamera();
@@ -278,6 +277,7 @@ public class World {
             if (obstacle.inProcess(player.getCenter())) {
                 if (player.getBounds().overlaps(obstacle.getBounds())) {
                     obstacle.enterObstacle(player);
+                    break;
                 } else {
                     player.setSlowEffect(false);
                 }

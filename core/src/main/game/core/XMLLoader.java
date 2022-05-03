@@ -75,7 +75,7 @@ public class XMLLoader {
         Array<Element> xmlColleges = root.getChildByName("colleges").getChildrenByName("college");
         Array<Element> xmlObjectives = root.getChildByName("objectives").getChildrenByName("objective");
         Array<Element> xmlObstacles = root.getChildByName("obstacles").getChildrenByName("obstacle");
-       Array<Element> xmlPowerups = root.getChildByName("powerups").getChildrenByName("powerup");
+        Array<Element> xmlPowerups = root.getChildByName("powerups").getChildrenByName("powerup");
 
         for (Element npc : xmlNpcs) {
             int health = Integer.parseInt(npc.get("health"));

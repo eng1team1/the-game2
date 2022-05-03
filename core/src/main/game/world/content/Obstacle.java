@@ -1,5 +1,7 @@
 package main.game.world.content;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -70,7 +72,12 @@ public class Obstacle extends Entity {
                 break;
             case Shipwreck: // slow + damage + chance of gold
                 player.setSlowEffect(true);
-                player.takeObstacleDamage(2);
+                Random rand = new Random();
+                int r = rand.nextInt(100);
+                if (r < 2) {
+                    player.collectGold(1);
+                    player.takeObstacleDamage(5);
+                } 
                 break;
         }
     }
