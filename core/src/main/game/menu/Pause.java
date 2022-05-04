@@ -31,12 +31,13 @@ public class Pause {
     private Stage stage;
     private BitmapFont font;
     private LabelStyle basicStyle;
-    private Label enter, exit, gold;
+    private Label enter, exit;
     private Texture logoTexture;
     private Sprite logo;
     private TextButton option1;
     private Skin skins;
     private TextureAtlas textureAtlas;
+     //initialises the GoldShop screen with all the actors
     public Pause(Set<NPC> npcs, Set<College> colleges, Player player ) {
         logoTexture = new Texture(Gdx.files.internal("icons/icon128.png"));
         logo = new Sprite(logoTexture);
@@ -45,7 +46,7 @@ public class Pause {
         font = new BitmapFont();
         basicStyle = new LabelStyle(font, Color.BLACK);
         enter = new Label("Game is Paused", basicStyle);
-        exit = new Label("PRESS ESCAPE TO EXIT", basicStyle);
+        exit = new Label("PRESS P TO Unpause", basicStyle);
 
         enter.setFontScale(2f);
         enter.setPosition(Gdx.graphics.getWidth() / 2 - enter.getWidth() / 2, 100);
@@ -66,6 +67,7 @@ public class Pause {
         logo.draw(stage.getBatch());
         stage.getBatch().end();
     }
+    //checks if still on the pause screen and whether any of the actors have changed
     private void update()
     {
         float delta = Gdx.graphics.getDeltaTime();
@@ -76,6 +78,7 @@ public class Pause {
         }
 
     }
+    //called in Mainrunner
     public void pauseCycle()
     {
         update();
@@ -86,6 +89,7 @@ public class Pause {
         font.dispose();
         logoTexture.dispose();
     }
+    //initialises a button for the stage
     private void initButtons(final Set<NPC> npcs, final Set<College> colleges, final Player player) {
         textureAtlas = new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"));
         this.skins = new Skin();

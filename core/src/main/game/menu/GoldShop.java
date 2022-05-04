@@ -17,19 +17,17 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import main.game.MainRunner;
 import main.game.world.player.Player;
-import main.game.world.player.Stats.Gold;
+
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.World;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class GoldShop {
     private Stage stage;
     private BitmapFont font;
     private LabelStyle basicStyle;
     private Label title, exit, goldsign;
-    private TextButton option1, option2, option3;
+    private TextButton healing, damageBuff, speedBuff;
     private Texture logoTexture;
     private Sprite logo;
     private Skin skins;
@@ -37,8 +35,8 @@ public class GoldShop {
     private int cost1, cost2, cost3;
     private int gold;
     private Player player;
+    //initialises the GoldShop screen with all the actors
     public GoldShop(Player player) {
-
         logoTexture = new Texture(Gdx.files.internal("icons/icon128.png"));
         logo = new Sprite(logoTexture);
         stage = new Stage(new ScreenViewport());
@@ -62,13 +60,13 @@ public class GoldShop {
         exit.setPosition(Gdx.graphics.getWidth() / 2 - exit.getWidth() / 2, 70);
         logo.setScale(0.5f);
         logo.setPosition(Gdx.graphics.getWidth() / 2 - logo.getWidth() / 2, Gdx.graphics.getHeight() -logo.getWidth() -50 );
-
         initButtons(gold);
         stage.addActor(goldsign);
         stage.addActor(title);
         stage.addActor(exit);
 
     }
+    //renders all the actors onto the screen
     private void render() {
         Gdx.gl.glClearColor(0.3f, 0.6f, 0.8f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -78,6 +76,7 @@ public class GoldShop {
 
         stage.getBatch().end();
     }
+    //updates the actors and checks whether it is still in the screen
     private void update()
     {
         float delta = Gdx.graphics.getDeltaTime();
@@ -87,6 +86,7 @@ public class GoldShop {
             MainRunner.inGold = false;            
         }
     }
+    //called in mainrunner
     public void goldCycle()
     {
         update();
@@ -97,6 +97,7 @@ public class GoldShop {
         font.dispose();
         logoTexture.dispose();
     }
+    //Initialises all buttons with correct text and sets the skins also what happens when each one is clicked
     private void initButtons(int Gold)
     {
         textureAtlas = new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas") );
@@ -104,10 +105,10 @@ public class GoldShop {
         this.skins.addRegions(textureAtlas);
         font = new BitmapFont();
         this.skins.load(Gdx.files.internal("ui/uiskin.json"));
-        option1 = new TextButton("Patch ye Vessel:" + cost1, skins, "default");
-        option1.setPosition(Gdx.graphics.getWidth()/2 - 140,400);
-        option1.setSize(280, 60);
-        option1.addListener(new ClickListener(){
+        healing = new TextButton("Patch ye Vessel:" + cost1, skins, "default");
+        healing.setPosition(Gdx.graphics.getWidth()/2 - 140,400);
+        healing.setSize(280, 60);
+        healing.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 System.out.println("clicked");
@@ -123,16 +124,16 @@ public class GoldShop {
                     goldsign.setText("You have: " + gold);
                     player.heal(player.getMaxHealth() - player.getHealth());
                     cost1 = player.getMaxHealth() - player.getHealth();
-                    option1.setText("Patch ye Vessel:" + cost1);
+                    healing.setText("Patch ye Vessel:" + cost1);
                     
                 }            
                 
             }
         });
-        option2 = new TextButton("Upgrade ye Cannons: "+ cost2, skins, "default");
-        option2.setPosition(Gdx.graphics.getWidth()/2 - 140,300);
-        option2.setSize(280, 60);
-        option2.addListener(new ClickListener(){
+        damageBuff = new TextButton("Upgrade ye Cannons: "+ cost2, skins, "default");
+        damageBuff.setPosition(Gdx.graphics.getWidth()/2 - 140,300);
+        damageBuff.setSize(280, 60);
+        damageBuff.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if(gold >= cost2)
@@ -142,16 +143,16 @@ public class GoldShop {
                     goldsign.setText("You have: " + gold);
                     player.increaseBoughtDamage(50);
                     cost2 = 400 + player.getBoughtDamage() *4;
-                    option2.setText("Upgrade ye Cannons: "+ cost2);
+                    damageBuff.setText("Upgrade ye Cannons: "+ cost2);
                    
                 }
             }
         });
-        option3 = new TextButton("Get bigger Sails: "+ cost3, skins, "default");
-        option3.setPosition(Gdx.graphics.getWidth()/2 - 140,200);
-        option3.setSize(280, 60);
+        speedBuff = new TextButton("Get bigger Sails: "+ cost3, skins, "default");
+        speedBuff.setPosition(Gdx.graphics.getWidth()/2 - 140,200);
+        speedBuff.setSize(280, 60);
 
-        option3.addListener(new ClickListener(){
+        speedBuff.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if(gold >= cost3)
@@ -161,15 +162,15 @@ public class GoldShop {
                     goldsign.setText("You have: " + gold);
                     player.increaseExtraSpeed(50);
                     cost3 = 200 + (int)player.getExtraSpeed()*4;
-                    option3.setText("Get bigger Sails: "+ cost3);
+                    speedBuff.setText("Get bigger Sails: "+ cost3);
                     
                 }
             }
         });
 
-        stage.addActor(option1);
-        stage.addActor(option2);
-        stage.addActor(option3);
+        stage.addActor(healing);
+        stage.addActor(damageBuff);
+        stage.addActor(speedBuff);
     }
 
 

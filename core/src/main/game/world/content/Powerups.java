@@ -44,6 +44,10 @@ public class Powerups extends Entity {
     System.out.println("type.toString(): " + type.toString());
     System.out.println("position: " + sprite.getX() + ", " + sprite.getY());
     }
+    public String gettype()
+    {
+        return String.valueOf(type);
+    }
     public void enterPowerup(Player player) {
         // Is called from World.java collisions() when player runs into powerup
         // Add effect to player based on type of obstacle

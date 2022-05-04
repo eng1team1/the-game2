@@ -10,41 +10,28 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector;
+
 import com.badlogic.gdx.math.Vector2;
 
 import main.game.MainRunner;
 import main.game.core.Calculations;
 import main.game.core.Constants;
 import main.game.core.XMLLoader;
-import main.game.core.Constants.*;
 import main.game.world.content.*;
 import main.game.world.player.Player;
 import main.game.world.ui.IGUI;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 
-import main.game.MainRunner;
-import main.game.core.Calculations;
-import main.game.core.Constants;
+
 import main.game.core.Constants.BulletConstants;
 import main.game.core.Constants.CollegeConstants;
 import main.game.core.Constants.NPCConstants;
 import main.game.core.Constants.PlayerConstants;
-import main.game.core.XMLLoader;
+
 import main.game.world.content.Bullet;
 import main.game.world.content.College;
 import main.game.world.content.Entity;
 import main.game.world.content.NPC;
-import main.game.world.player.Player;
-import main.game.world.ui.IGUI;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+
 public class World {
     private Player player;
     private IGUI inGameUI;
@@ -119,7 +106,7 @@ public class World {
      */
     private void update() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) MainRunner.IS_MENU = true;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.G))
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G))//Checks for input to change screens to goldShop
         {
             MainRunner.Is_Gold = true;
         }
@@ -283,29 +270,38 @@ public class World {
                 }
             }
         }
+        //checks if player is colliding with powerup
         Iterator<Powerups> powIterator = powerups.iterator();
         while (powIterator.hasNext()) {
             Powerups powerup = powIterator.next();
             powerup.update(deltaTime);
         }
-        // call and apply obstacle from obstacle class
-        // or add new method in player class and pass obstacle to player. <-- this one better?
-        
+        // call and apply powerup from powerups class 
         for (Powerups powerup : powerups) {
             if (powerup.inProcess(player.getCenter())) {
                 if (player.getBounds().overlaps(powerup.getBounds())) {
                     powerup.enterPowerup(player);
-                    ispowerup = true;
+                    if (powerup.gettype()=="xp")
+                    {
+                        player.powerup(false);
+                        
+                    }
+                    else
+                    {
+                        ispowerup = true;
+                    }
                     timesinceCollision = Gdx.graphics.getDeltaTime();
-                } else {
-                    player.setSlowEffect(false);
+                    powerup.dispose();
+                    powIterator.remove();
+                    
                 }
             }
         }
-        
+        //if you have powerup remove after period of time 
         if(ispowerup)  
         {
-        if(timesinceCollision+10 == Gdx.graphics.getDeltaTime()){
+            
+            if(timesinceCollision+ 10 <= Gdx.graphics.getDeltaTime()){    
             {
                 player.powerup(false);
             } 
