@@ -32,3 +32,13 @@ jobs:
       uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
       with:
         arguments: build
+  lint:
+  
+    runs-on: ubuntu-latest
+    
+    steps: 
+    - uses: actions/checkout@v3
+    - name: Super-Linter
+      uses: github/super-linter@v4.9.2
+      env: 
+        GITHUB_TOKEN: $ {{ secrets.GITHUB_TOKEN }}
